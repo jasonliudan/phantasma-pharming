@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 
-import { supportedPools } from 'lib/constants';
-import FarmCard from 'components/farmCard';
+import Config from 'lib/config';
+import PoolCard from 'components/poolCard';
 
 import styled from 'styled-components';
 
 class App extends Component {
 
     render() {
+        const { pools } = Config;
         return (
             <FarmsContainer>
                 {
-                    supportedPools.map((pool, index) =>
-                        <FarmCard key={index} poolData={pool} />)
+                    pools.map((pool, index) =>
+                        <PoolCard key={index}
+                            poolData={pool}
+                            apy={123.3} />)
                 }
             </FarmsContainer>
         );

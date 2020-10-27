@@ -2,36 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import styled from 'styled-components';
-import { supportedPools } from 'lib/constants';
+//import { supportedPools } from 'lib/constants';
 import { MainButton } from 'components/basicComponents';
 
-import { approve } from 'api/metamask';
+//import { approve } from 'api/metamask';
 
 class Farm extends Component {
 
     render() {
         const { pid } = this.props.match.params;
         const { account } = this.props;
-        const poolData = supportedPools.find(pool => pool.pid === pid);
+        //      const poolData = supportedPools.find(pool => pool.pid === pid);
 
         return (
             <div>
                 {account !== null ? <div>
-                    <h1>{poolData.name}</h1>
                     <InfoCardWrapper>
-                        <InfoCard>
-                            <h2>{poolData.tokenSymbol}</h2>
-                            <p style={{ fontSize: '60px' }}>0.000</p>
-                            <p>{`${poolData.tokenSymbol} EARNED`}</p>
-                            <MainButton>HARVEST</MainButton>
-                        </InfoCard>
-
-                        <InfoCard>
-                            <h2>{poolData.symbol}</h2>
-                            <p style={{ fontSize: '60px' }}>0.000</p>
-                            <p>{`${poolData.symbol} STAKED`}</p>
-                            <MainButton>{`APPROVE ${poolData.symbol}`}</MainButton>
-                        </InfoCard>
+                        sdf
                     </InfoCardWrapper>
                 </div> : <p>Connect Now</p>}
             </div>
