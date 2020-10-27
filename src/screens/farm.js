@@ -2,23 +2,36 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import styled from 'styled-components';
+
+import Config from 'lib/config';
 //import { supportedPools } from 'lib/constants';
 import { MainButton } from 'components/basicComponents';
-
+import RewardAsset from 'components/rewardAsset';
 //import { approve } from 'api/metamask';
 
 class Farm extends Component {
 
+
+    harvest() {
+
+    }
+
     render() {
         const { pid } = this.props.match.params;
         const { account } = this.props;
-        //      const poolData = supportedPools.find(pool => pool.pid === pid);
-
+        const poolData = Config.pools.find(pool => pool.poolId === pid);
+        //        console.log(poolData.rewardToken)
+        const rewardTokenInfo = Config.tokens[poolData.rewardToken];
         return (
             <div>
                 {account !== null ? <div>
                     <InfoCardWrapper>
-                        sdf
+                        <RewardAsset
+                            rewardToken={rewardTokenInfo}
+                            earned={0.001}
+                            percent={1}
+                            onHarvest={this.harvest}
+                        />
                     </InfoCardWrapper>
                 </div> : <p>Connect Now</p>}
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Button } from '@material-ui/core';
-import Config from 'config';
+import Config from 'lib/config';
 import { numberWithDecimals } from 'utils';
 
 
