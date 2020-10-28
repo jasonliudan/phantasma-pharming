@@ -6,12 +6,12 @@ const initialState = {
     poolInfo: null,
     stakeTokenInfo: null,
     rewardTokenInfo: null,
-    allowance: null,
-    staked: null,
-    totalStaked: null,
-    stakeTokenBalance: null,
-    earned: null,
-    periodFinish: null,
+    allowance: 0,
+    staked: 0,
+    totalStaked: 0,
+    stakeTokenBalance: 0,
+    earned: 0,
+    periodFinish: new Date(),
 };
 
 export default function setBrowserInfo(state = initialState, action) {
@@ -25,6 +25,56 @@ export default function setBrowserInfo(state = initialState, action) {
             return {
                 ...state,
                 stakeTokenContract: action.payload
+            }
+        case constants.POOL_SET_REWARD_TOKEN_INFO:
+            return {
+                ...state,
+                rewardTokenInfo: action.payload
+            }
+        case constants.POOL_SET_CONTRACT:
+            return {
+                ...state,
+                contract: action.payload
+            }
+        case constants.POOL_SET_STAKE_TOKEN_CONTRACT:
+            return {
+                ...state,
+                stakeTokenContract: action.payload
+            }
+        case constants.POOL_SET_REWARD_TOKEN_CONTRACT:
+            return {
+                ...state,
+                rewardTokenContract: action.payload
+            }
+        case constants.POOL_APPROVE_TOKEN_SUCCESS:
+            return {
+                ...state,
+                allowance: action.payload
+            }
+        case constants.POOL_GET_STAKED_SUCCESS:
+            return {
+                ...state,
+                staked: action.payload
+            }
+        case constants.POOL_GET_EARNED_SUCCESS:
+            return {
+                ...state,
+                earned: action.payload
+            }
+        case constants.POOL_GET_STAKE_TOKEN_BALANCE_SUCCESS:
+            return {
+                ...state,
+                stakeTokenBalance: action.payload
+            }
+        case constants.POOL_GET_TOTAL_STAKED_SUCCESS:
+            return {
+                ...state,
+                totalStaked: action.payload
+            }
+        case constants.POOL_GET_PERIOD_FINISH_SUCCESS:
+            return {
+                ...state,
+                periodFinish: action.payload
             }
         default:
             return state;
