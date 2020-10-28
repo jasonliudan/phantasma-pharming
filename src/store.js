@@ -2,20 +2,20 @@ import { createStore, applyMiddleware } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
-//import createSagaMiddleware from 'redux-saga';
+import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from './reducers';
-//import sagas from './sagas';
+import sagas from './sagas';
 
 export const history = createBrowserHistory();
 
-//const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware();
 
 const initialState = {};
 const enhancers = [];
 const middleware = [
   routerMiddleware(history),
-  //    sagaMiddleware
+  sagaMiddleware
 ];
 /*
 if (process.env.NODE_ENV === 'development') {
@@ -36,6 +36,6 @@ const store = createStore(
   composedEnhancers
 );
 
-//sagaMiddleware.run(sagas);
+sagaMiddleware.run(sagas);
 
 export default store;

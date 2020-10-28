@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import mainReducer from './mainReducer';
+import accountReducer from './accountReducer';
+import poolReducer from './poolReducer';
 
 export default combineReducers({
-    mainReducer
+    accountReducer,
+    poolReducer
 });

@@ -20,7 +20,13 @@ async function getAccount() {
     const accounts = await web3.eth.getAccounts();
     return accounts[0];
 }
-
+async function approve(contract, address, from) {
+    const max = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+    await contract.methods.approve(address, max).send({ from })
+        .on('error', function (error, receipt) {
+            console.log(error, receipt);
+        });
+}
 
 /**
  * Common Contract Functions
@@ -96,6 +102,7 @@ export default {
     getAccount,
     getContract,
     getBalance,
+    approve,
 
     poolGetRewardRate
 };

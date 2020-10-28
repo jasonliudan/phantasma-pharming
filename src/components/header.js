@@ -36,7 +36,7 @@ class Header extends Component {
 
 
 const mapStateToProps = state => ({
-    account: state.mainReducer.account
+    account: state.accountReducer.account
 });
 const mapDispatchToProps = dispatch => ({
     setAccount: (account) => dispatch(setAccount(account))
