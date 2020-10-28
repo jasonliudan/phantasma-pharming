@@ -1,22 +1,15 @@
 import Web3 from 'web3';
 
 let web3 = window.web3;
-async function loadWeb3() {
-    if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-        await window.ethereum.enable();
-    }
-    else if (window.web3) {
-        web3 = new Web3(window.web3.currentProvider);
-    }
-    else {
-        window.alert('Non-Ethereum Browser Detected. You should consider trying MetaMask!');
-    }
+if (typeof web3 !== 'undefined') {
+    web3 = new Web3(Web3.givenProvider);
+} else {
+    web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/0e40641961194ee2b9b45de0673f95fa'));
 }
 
 
 async function getAccount() {
-    await loadWeb3();
+    //await loadWeb3();
     const accounts = await web3.eth.getAccounts();
     return accounts[0];
 }
@@ -32,7 +25,7 @@ async function approve(contract, address, from) {
  * Common Contract Functions
  */
 function getContract(abi, address) {
-    return new web3.eth.contract(abi, address);
+    return new web3.eth.Contract(abi, address);
 }
 async function getBalance(contract, address) {
     const _address = address || getAccount();
