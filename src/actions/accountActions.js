@@ -1,8 +1,8 @@
 import * as constants from 'constants.js';
 
-export function setWallet(account) {
+export function setAccount(account) {
     return {
-        type: constants.SET_WALLET,
+        type: constants.SET_ACCOUNT,
         account
     };
 }

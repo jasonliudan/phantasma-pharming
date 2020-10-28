@@ -1,46 +1,54 @@
 import React from 'react';
-import { Card, CardContent, Button } from '@material-ui/core';
+import styled from 'styled-components';
+
 import Config from 'lib/config';
 import { numberWithDecimals } from 'utils';
 
 
+import { MainButton } from 'components/basicComponents';
+
 export const RewardAsset = ({ earned, onHarvest, percent, rewardToken }) => {
     return (
-        <Card className='card card-h medium transparent'>
-            <CardContent>
-                <div className='section'>
-                    <div className='center-h'>
+        <Card>
+            <div>
+                <div>
+                    <div>
                         <h2>{rewardToken.name}</h2>
                     </div>
-                    <div className='circle'>
-                        <img className="logo-image" src={rewardToken.image} alt={rewardToken.name} />
+                    <div>
+                        <img src={rewardToken.image} alt={rewardToken.name} />
                     </div>
-                    <div className='center-h mt-50'>
-                        <span className='text-number'>
+                    <div>
+                        <span>
                             {numberWithDecimals(earned, rewardToken.decimals, Config.Utils.decimals)}
                         </span>
                     </div>
-                    <div className='center-h'>
-                        <span className='text-tiny text-gray'>{`Estimated ${rewardToken.symbol} earned`}</span>
+                    <div>
+                        <span>{`Estimated ${rewardToken.symbol} earned`}</span>
                     </div>
                 </div>
-                <div className='section'>
-                    <div className='mt-30' />
-                    <div className='center-h'>
-                        <Button
-                            variant='contained'
-                            className='btn-primary'
-                            onClick={onHarvest}
-                            disabled={earned <= 0}
-                        >
+                <div>
+                    <div>
+                        <MainButton style={{ margin: '15px 0px', width: '100%' }}
+                            onClick={onHarvest}>
                             Harvest
-            </Button>
+                        </MainButton>
                     </div>
                 </div>
-            </CardContent>
+            </div>
         </Card>
     )
 }
+
+const Card = styled.div`
+    width: 285px;
+    height: 350px;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 15px;
+    background-color: #1D2D50;
+    font-family: "Geo",sans-serif;
+`
 
 export default RewardAsset;
 

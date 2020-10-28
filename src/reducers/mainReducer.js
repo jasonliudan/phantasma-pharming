@@ -3,7 +3,7 @@ const initialState = { account: null };
 
 export default function setBrowserInfo(state = initialState, action) {
     switch (action.type) {
-        case constants.SET_WALLET:
+        case constants.SET_ACCOUNT:
             return {
                 ...state,
                 account: action.account

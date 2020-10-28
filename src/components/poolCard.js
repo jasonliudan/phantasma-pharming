@@ -24,7 +24,7 @@ class PoolCard extends Component {
                     <p>{`Deposit ${stakingTokenData.symbol}`}</p>
                     <p>{`Earn KCAL`}</p>
                 </div>
-                <MainButton style={{ margin: '15px 0px' }}
+                <MainButton style={{ margin: '15px 0px', width: '100%' }}
                     onClick={() => this.props.history.push(`farm/${poolData.poolId}`)}> SELECT </MainButton>
             </FarmCardWrapper>
         );

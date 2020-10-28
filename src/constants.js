@@ -1,1 +1,3 @@
-export const SET_WALLET = 'SET_WALLET';
+export const SET_ACCOUNT = 'SET_ACCOUNT';
+
+export const POOL_APPROVE_TOKEN = 'POOL_APPROVE_TOKEN';

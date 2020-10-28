@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 
 import { WalletConnectButton } from 'components/basicComponents';
-import { setWallet } from 'actions/main';
+import { setAccount } from 'actions';
 import Web3Client from 'api/web3client';
 
 class Header extends Component {
 
     async connectMetamask() {
         const account = await Web3Client.getAccount();
-        this.props.setWallet(account);
+        this.props.setAccount(account);
     }
 
     render() {
@@ -39,7 +39,7 @@ const mapStateToProps = state => ({
     account: state.mainReducer.account
 });
 const mapDispatchToProps = dispatch => ({
-    setWallet: (account) => dispatch(setWallet(account))
+    setAccount: (account) => dispatch(setAccount(account))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
