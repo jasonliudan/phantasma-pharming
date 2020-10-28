@@ -4,26 +4,35 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import Config from 'lib/config';
-//import { supportedPools } from 'lib/constants';
-import { MainButton } from 'components/basicComponents';
+
+import { WalletConnectButton } from 'components/basicComponents';
 import RewardAsset from 'components/rewardAsset';
 import StakeAsset from 'components/stakingAsset';
 import {
     poolSetPoolInfo,
     poolSetStakeTokenInfo,
-    poolApproveToken
-} from 'actions';
-//import { approve } from 'api/metamask';
+    poolStake,
+    poolWithdraw,
+    poolApproveToken,
+    poolHarvest,
+    poolExit,
+    poolGetStaked,
+    poolGetEarned,
+} from 'actions/poolActions';
+import { setAccount } from 'actions/accountActions';
 import web3client from 'api/web3client';
+import { getDateLeft } from 'utils';
 
 class Farm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            poolData: null
+            poolData: null,
+            timeLeft: 0
         };
     }
+
     componentDidMount() {
         const { pid } = this.props.match.params;
         const poolData = Config.pools.find(pool => pool.poolId === pid);
@@ -32,51 +41,52 @@ class Farm extends Component {
         this.props.setPoolInfo(poolData);
         const contract = web3client.getContract(Config.tokens['SOUL'].abi, Config.tokens['SOUL'].address);
         this.props.setStakeTokenInfo(contract);
-    }
-    harvest() {
 
+        //Time Left
+        this.setState({
+            timeLeft: getDateLeft(this.props.deadline)
+        });
     }
-    approve() {
 
+    async connectMetamask() {
+        const account = await web3client.getAccount();
+        this.props.setAccount(account);
     }
-    stake(amount) {
 
-    }
-    unstake() {
-
-    }
     render() {
         const { account } = this.props;
         const { poolData } = this.state;
         if (!poolData) return <div />;
-        //        console.log(poolData.rewardToken)
+
         const rewardTokenInfo = Config.tokens[poolData.rewardToken];
         const stakeTokenInfo = Config.tokens[poolData.stakingToken];
+
         return (
             <div>
                 {account !== null ? <div>
                     <InfoCardWrapper>
                         <RewardAsset
                             rewardToken={rewardTokenInfo}
-                            earned={0.001}
+                            earned={this.props.earned}
                             percent={1}
-                            onHarvest={this.harvest}
+                            onHarvest={() => this.props.harvest()}
                         />
                         <StakeAsset
                             stakeTokenInfo={stakeTokenInfo}
                             rewardTokenInfo={rewardTokenInfo}
-                            allowed={true}
-                            started={10}
-                            staked={true}
-                            totalStaked={1000}
-                            balance={1000}
-                            rewardBalance={1000}
+                            allowed={this.props.allowance > 0}
+                            started={this.state.timeLeft > 0}
+                            staked={this.props.staked}
+                            totalStaked={this.props.totalStaked}
+                            balance={this.props.stakeTokenBalance}
+                            rewardBalance={this.props.poolInfo.balance}
                             onApprove={() => this.props.approve()}
-                            onStake={(amount) => this.stake(amount)}
-                            onUnstake={this.unstake}
+                            onStake={(amount) => this.props.stake(amount)}
+                            onUnstake={() => this.props.unstake()}
                         />
                     </InfoCardWrapper>
-                </div> : <p>Connect Now</p>}
+                </div> : <WalletConnectButton
+                    onClick={() => this.connectMetamask()}>CONNECT WALLET</WalletConnectButton>}
             </div>
         );
     }
@@ -87,12 +97,30 @@ const InfoCardWrapper = styled.div`
 `
 
 const mapStateToProps = state => ({
-    account: state.accountReducer.account
+    account: state.accountReducer.account,
+    totalStaked: state.poolReducer.totalStaked,
+    staked: state.poolReducer.staked,
+    allowance: state.poolReducer.allowance,
+    earned: state.poolReducer.earned,
+    stakeTokenBalance: state.poolReducer.stakeTokenBalance,
+    deadline: state.poolReducer.deadline,
+    stakeTokenInfo: state.poolReducer.stakeTokenInfo,
+    rewardTokenInfo: state.poolReducer.rewardTokenInfo,
+    poolInfo: state.poolReducer.poolInfo
 });
 const mapDispatchToProps = dispatch => ({
+    setAccount: (account) => dispatch(setAccount(account)),
+
     setPoolInfo: (payload) => dispatch(poolSetPoolInfo(payload)),
     setStakeTokenInfo: (payload) => dispatch(poolSetStakeTokenInfo(payload)),
-    approve: () => dispatch(poolApproveToken())
+
+    stake: (payload) => dispatch(poolStake(payload)),
+    unstake: (payload) => dispatch(poolWithdraw(payload)),
+    approve: () => dispatch(poolApproveToken()),
+    harvest: () => dispatch(poolHarvest()),
+    exit: () => dispatch(poolExit()),
+    loadEarned: () => dispatch(poolGetEarned()),
+    loadStaked: () => dispatch(poolGetStaked()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Farm);

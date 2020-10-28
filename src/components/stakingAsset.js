@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import Config from 'lib/config';
 import { numberWithDecimals } from 'utils';
-//import { StakeDialog, UnstakeDialog } from 'components';
 
 import { MainButton } from 'components/basicComponents';
+import StakeDialog from 'components/dialogs/stakeDialog';
+import UnstakeDialog from 'components/dialogs/unstakeDialog';
 
 export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, onUnstake, balance, rewardBalance, stakeTokenInfo, rewardTokenInfo }) => {
     const [stakeDialogOpen, setStakeDialogOpen] = React.useState(false);
@@ -32,7 +33,7 @@ export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, o
                 </div>
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '15px' }}>
-                        {!allowed ? (
+                        {allowed ? (
                             <MainButton style={{ width: '75%' }}
                                 onClick={() => setStakeDialogOpen(true)}>
                                 Stake
@@ -51,6 +52,38 @@ export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, o
                     </div>
                 </div>
             </div>
+
+            <StakeDialog
+                open={stakeDialogOpen}
+                poolBalance={rewardBalance}
+                stakeToken={stakeTokenInfo}
+                rewardToken={rewardTokenInfo}
+                totalStaked={totalStaked}
+                userBalance={balance}
+                dialogTitle={(
+                    <div>
+                        <img src={stakeTokenInfo.image} alt={stakeTokenInfo.name} width={35} />
+                        <span>{`Stake ${stakeTokenInfo.symbol}`}</span>
+                    </div>
+                )}
+                onStake={onStake}
+                onClose={() => setStakeDialogOpen(false)}
+            />
+            <UnstakeDialog
+                open={unstakeDialogOpen}
+                stakeToken={stakeTokenInfo}
+                totalStaked={totalStaked}
+                staked={staked}
+                userBalance={balance}
+                dialogTitle={(
+                    <div>
+                        <img src={stakeTokenInfo.image} alt={stakeTokenInfo.name} />
+                        <span>{`Withdraw ${stakeTokenInfo.symbol}`}</span>
+                    </div>
+                )}
+                onUnstake={onUnstake}
+                onClose={() => setUnstakeDialogOpen(false)}
+            />
         </Card >
     )
 }

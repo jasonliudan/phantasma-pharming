@@ -30,6 +30,7 @@ export const RewardAsset = ({ earned, onHarvest, percent, rewardToken }) => {
                 <div>
                     <div>
                         <MainButton style={{ margin: '15px 0px', width: '100%' }}
+                            disabled={earned <= 0}
                             onClick={onHarvest}>
                             Harvest
                         </MainButton>

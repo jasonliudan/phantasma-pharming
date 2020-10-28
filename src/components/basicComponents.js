@@ -13,14 +13,21 @@ export const MainButton = styled.button`
     &:hover{
         background-color: #0f3460;
     }
+    &:disabled{
+      opacity: 0.5;
+      &:hover{
+        background-color: #133B5C;
+      }
+    }
 `
 
+
 export const WalletConnectButton = styled.button`
-  cursor: pointer;
-  margin-top: 25px;
-  font-family: "Geo",sans-serif;
-  font-size: 1.6rem;
-  background: none;
-  color: white;
-  border: none;
+cursor: pointer;
+margin - top: 25px;
+font - family: "Geo", sans - serif;
+font - size: 1.6rem;
+background: none;
+color: white;
+border: none;
 `
