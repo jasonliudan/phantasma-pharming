@@ -78,6 +78,7 @@ export const GlobalStyle = createGlobalStyle`
     position: absolute;
     top: 50%;
     left: 50%;
+    min-width: 1000px;
     transform: translate(-50%, -50%);
     text-align: center;
   }

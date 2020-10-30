@@ -52,14 +52,18 @@ const StakeDialog = ({
                     Your {stakeToken.symbol} Balance is&nbsp;
                     <b>{numberWithDecimals(userBalance, stakeToken.decimals, Config.Utils.decimals)}</b>&nbsp;
                 </span>
-                <Button onClick={handleSetMax}>Max</Button>
-                <TextField
-                    variant='outlined' type='number'
-                    placeholder='Enter amount to stake'
-                    onChange={(event) => setStakeAmount(event.target.value)}
-                    value={stakeAmount}
-                    required
-                />
+                <hr />
+                <div>
+                    <Button onClick={handleSetMax} color='primary' variant='outlined' size='medium'>
+                        Max</Button>&nbsp;
+                    <TextField
+                        variant='outlined' type='number' size='small'
+                        placeholder='Enter amount to stake'
+                        onChange={(event) => setStakeAmount(event.target.value)}
+                        value={stakeAmount}
+                        required
+                    />
+                </div>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleStake} >

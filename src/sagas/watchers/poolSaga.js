@@ -52,9 +52,10 @@ function* stake({ payload }) {
         const state = yield select();
         const account = state.accountReducer.account;
         const poolContract = state.poolReducer.contract;
-        const stakingTokenInfo = state.poolReducer.stakeTokenContract;
+        const stakingTokenInfo = state.poolReducer.stakeTokenInfo;
+
         if (!account || !poolContract || !stakingTokenInfo) return;
-        yield web3client.poolStake(poolContract, payload, stakingTokenInfo.decimals, account.address);
+        yield web3client.poolStake(poolContract, payload, stakingTokenInfo.decimals, account);
         yield put(poolGetStaked());
     } catch (err) {
         console.error(err);
@@ -66,7 +67,7 @@ function* withdraw({ payload }) {
         const state = yield select();
         const account = state.accountReducer.account;
         const poolContract = state.poolReducer.contract;
-        const stakingTokenInfo = state.poolReducer.stakeTokenContract;
+        const stakingTokenInfo = state.poolReducer.stakeTokenInfo;
         if (!account || !poolContract || !stakingTokenInfo) return;
         yield web3client.poolWithdraw(poolContract, payload, stakingTokenInfo.decimals, account.address);
         yield put(poolGetStaked());
@@ -118,13 +119,14 @@ function* getEarned() {
 }
 
 function* getStaked() {
+    console.log('getting')
     try {
         const state = yield select();
         const account = state.accountReducer.account;
         const poolContract = state.poolReducer.contract;
         if (!account || !poolContract) return;
 
-        const staked = yield web3client.getBalance(poolContract, account.address);
+        const staked = yield web3client.getBalance(poolContract, account);
         const totalStaked = yield web3client.getTotalSupply(poolContract);
         yield put(poolGetStakedSuccess(staked));
         yield put(poolGetTotalStakedSuccess(totalStaked));
@@ -141,7 +143,7 @@ function* getStakeTokenBalance() {
         const stakeTokenContract = state.poolReducer.stakeTokenContract;
         if (!account || !stakeTokenContract) return;
 
-        const balance = yield web3client.getBalance(stakeTokenContract, account.address);
+        const balance = yield web3client.getBalance(stakeTokenContract, account);
         yield put(poolGetStakeTokenBalanceSuccess(balance));
     } catch (err) {
         console.error(err);

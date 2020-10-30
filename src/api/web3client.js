@@ -40,6 +40,11 @@ async function getBalance(contract, address) {
     return parseInt(result);
 }
 
+async function getTotalSupply(contract) {
+    const result = await contract.methods.totalSupply().call();
+    return parseInt(result);
+}
+
 /**
  * StakingRewards Pool Contract Functions
  */
@@ -102,6 +107,7 @@ export default {
     getAccount,
     getContract,
     getBalance,
+    getTotalSupply,
     approve,
     allowance,
     poolGetEarned,
