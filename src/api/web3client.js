@@ -15,10 +15,16 @@ async function getAccount() {
 }
 async function approve(contract, address, from) {
     const max = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-    await contract.methods.approve(address, max).send({ from })
+    await contract.methods.approve(address, max, from).send({ from })
         .on('error', function (error, receipt) {
             console.log(error, receipt);
         });
+}
+
+async function allowance(contract, owner, spender) {
+    console.log(contract, owner, spender)
+    const result = await contract.methods.allowance(owner, spender).call();
+    return result;
 }
 
 /**
@@ -96,6 +102,12 @@ export default {
     getContract,
     getBalance,
     approve,
-
-    poolGetRewardRate
+    allowance,
+    poolGetEarned,
+    poolGetPeriodFinish,
+    poolGetRewardRate,
+    poolStake,
+    poolWithdraw,
+    poolHarvest,
+    poolExit
 };

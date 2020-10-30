@@ -33,7 +33,7 @@ class Farm extends Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { pid } = this.props.match.params;
         const poolData = Config.pools.find(pool => pool.poolId === pid);
         this.setState({ poolData: poolData });
@@ -46,6 +46,9 @@ class Farm extends Component {
         this.setState({
             timeLeft: getDateLeft(this.props.deadline)
         });
+
+
+
     }
 
     async connectMetamask() {

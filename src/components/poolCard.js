@@ -10,7 +10,7 @@ import CardIcon from 'components/cardIcon';
 class PoolCard extends Component {
 
     render() {
-        const { poolData } = this.props;
+        const { poolData, apy } = this.props;
         const { tokens } = Config;
         const stakingTokenData = tokens[poolData.stakingToken];
 
@@ -26,6 +26,10 @@ class PoolCard extends Component {
                 </div>
                 <MainButton style={{ margin: '15px 0px', width: '100%' }}
                     onClick={() => this.props.history.push(`farm/${poolData.poolId}`)}> SELECT </MainButton>
+                {apy !== undefined ?
+                    <p style={{ display: 'flex', justifyContent: 'center' }}>{`APY ${apy}%`}</p> :
+                    <p>Loading ...</p>
+                }
             </FarmCardWrapper>
         );
     }

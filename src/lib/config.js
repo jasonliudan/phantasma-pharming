@@ -3,6 +3,7 @@ export default {
         SOUL: {
             address: '0x79c75e2e8720b39e258f41c37cc4f309e0b0ff80',
             name: 'Phantasma',
+            tokenId: 'phantasma',
             symbol: 'SOUL',
             decimals: 18,
             image: require('assets/icons/phantasma.png'),
@@ -11,6 +12,7 @@ export default {
         KCAL: {
             address: '0x14eb60f5f270b059b0c788de0ddc51da86f8a06d',
             name: 'Phantasma Energy',
+            tokenId: 'phantasma-energy',
             symbol: 'KCAL',
             decimals: 18,
             image: require('assets/icons/phantasma-energy.png'),
@@ -19,7 +21,7 @@ export default {
     },
     pools: [
         {
-            address: '',
+            address: '0x3e11cBaC5427F60F42E05AAC1De54FdB061C92ef',
             stakingToken: 'SOUL',
             rewardToken: 'KCAL',
             poolId: 'farm-soul',

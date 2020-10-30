@@ -37,8 +37,9 @@ function* approve() {
         const poolInfo = state.poolReducer.poolInfo;
         if (!account || !stakeTokenContract || !poolInfo) return;
 
-        yield web3client.approve(stakeTokenContract, poolInfo.address, account.address);
-        const allowance = yield web3client.allowance(stakeTokenContract, account.address, poolInfo.address);
+        yield web3client.approve(stakeTokenContract, poolInfo.address, account);
+        const allowance = yield web3client.allowance(stakeTokenContract, account, poolInfo.address);
+        console.log(allowance)
         yield put(poolApproveTokenSuccess(allowance));
     } catch (err) {
         yield put(poolApproveTokenSuccess(0));

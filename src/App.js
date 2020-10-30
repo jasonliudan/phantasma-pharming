@@ -9,18 +9,9 @@ import Farms from 'screens/farms';
 import Farm from 'screens/farm';
 import GeoFont from 'assets/fonts/Geo-Regular.ttf';
 
-import Config from 'lib/config';
-import web3client from 'api/web3client';
-import coingeckoClient from 'api/coingecko';
 class App extends Component {
 
-  async componentDidMount() {
-    const souldPrice = await coingeckoClient.getPrice('phantasma');
-    const poolContract = web3client.getContract(Config.pools[0].abi, Config.pools[0].address);
-    //const res = web3client.poolGetRewardRate(poolContract);
-    //console.log(souldPrice, poolContract, res)
 
-  }
   render() {
     return (
       <Provider store={store}>
