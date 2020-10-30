@@ -6,9 +6,9 @@ import { numberWithDecimals } from 'utils';
 
 import { MainButton } from 'components/basicComponents';
 import StakeDialog from 'components/dialogs/stakeDialog';
-import UnstakeDialog from 'components/dialogs/unstakeDialog';
+import UnstakeAllDialog from 'components/dialogs/unstakeAllDialog';
 
-export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, onUnstake, balance, rewardBalance, stakeTokenInfo, rewardTokenInfo }) => {
+export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, onUnstakeAll, balance, rewardBalance, stakeTokenInfo, rewardTokenInfo }) => {
     const [stakeDialogOpen, setStakeDialogOpen] = React.useState(false);
     const [unstakeDialogOpen, setUnstakeDialogOpen] = React.useState(false);
 
@@ -69,19 +69,17 @@ export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, o
                 onStake={onStake}
                 onClose={() => setStakeDialogOpen(false)}
             />
-            <UnstakeDialog
+            <UnstakeAllDialog
                 open={unstakeDialogOpen}
                 stakeToken={stakeTokenInfo}
-                totalStaked={totalStaked}
                 staked={staked}
-                userBalance={balance}
                 dialogTitle={(
                     <div>
                         <img src={stakeTokenInfo.image} alt={stakeTokenInfo.name} />
                         <span>{`Withdraw ${stakeTokenInfo.symbol}`}</span>
                     </div>
                 )}
-                onUnstake={onUnstake}
+                onUnstakeAll={onUnstakeAll}
                 onClose={() => setUnstakeDialogOpen(false)}
             />
         </Card >

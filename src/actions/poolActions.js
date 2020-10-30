@@ -69,7 +69,7 @@ export const poolStake = (payload) => {
 
 export const poolWithdraw = (payload) => {
     return {
-        type: constants.POOL_WITHDRAW,
+        type: constants.POOL_WITHDRAW_ALL,
         payload
     }
 };

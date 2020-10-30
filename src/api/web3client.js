@@ -64,12 +64,22 @@ async function poolStake(contract, amount, tokenDecimals, from) {
         });
 }
 
+/*
 async function poolWithdraw(contract, amount, tokenDecimals, from) {
     const precision_ = precision(amount);
     const amount_ = Web3.utils.toBN(amount * 10 ** precision_);
     const pow_ = Web3.utils.toBN(10 ** (tokenDecimals - precision_));
     await contract.methods.withdraw(amount_.mul(pow_)).send({ from, gas: 200000 })
         .on('error', function (error, receipt) {
+            console.log(error, receipt);
+        });
+}*/
+
+async function poolWithdrawAll(contract, from) {
+    await contract.methods.withdrawAll().send({ from, gas: 200000 })
+        .on('error', function (error, receipt) {
+
+            console.log('here')
             console.log(error, receipt);
         });
 }
@@ -114,7 +124,7 @@ export default {
     poolGetPeriodFinish,
     poolGetRewardRate,
     poolStake,
-    poolWithdraw,
+    poolWithdrawAll,
     poolHarvest,
     poolExit
 };

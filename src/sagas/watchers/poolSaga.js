@@ -62,14 +62,14 @@ function* stake({ payload }) {
     }
 }
 
-function* withdraw({ payload }) {
+function* withdrawAll() {
     try {
         const state = yield select();
         const account = state.accountReducer.account;
         const poolContract = state.poolReducer.contract;
-        const stakingTokenInfo = state.poolReducer.stakeTokenInfo;
-        if (!account || !poolContract || !stakingTokenInfo) return;
-        yield web3client.poolWithdraw(poolContract, payload, stakingTokenInfo.decimals, account.address);
+        if (!account || !poolContract) return;
+
+        yield web3client.poolWithdrawAll(poolContract, account);
         yield put(poolGetStaked());
     } catch (err) {
 
@@ -119,7 +119,6 @@ function* getEarned() {
 }
 
 function* getStaked() {
-    console.log('getting')
     try {
         const state = yield select();
         const account = state.accountReducer.account;
@@ -167,7 +166,7 @@ export default function* watchGetUsersSaga() {
     yield takeLatest(constants.POOL_LOAD_ALLOWANCE, loadAllowance);
     yield takeLatest(constants.POOL_APPROVE_TOKEN, approve);
     yield takeLatest(constants.POOL_STAKE, stake);
-    yield takeLatest(constants.POOL_WITHDRAW, withdraw);
+    yield takeLatest(constants.POOL_WITHDRAW_ALL, withdrawAll);
     yield takeLatest(constants.POOL_HARVEST, harvest);
     yield takeLatest(constants.POOL_EXIT, exit);
     yield takeLatest(constants.POOL_GET_EARNED, getEarned);

@@ -108,7 +108,7 @@ class Farm extends Component {
                             rewardBalance={this.props.poolInfo.balance}
                             onApprove={() => this.props.approve()}
                             onStake={(amount) => this.props.stake(amount)}
-                            onUnstake={() => this.props.unstake()}
+                            onUnstakeAll={() => this.props.unstake(this.props.staked)}
                         />
                     </InfoCardWrapper>
                 </div> : <WalletConnectButton
