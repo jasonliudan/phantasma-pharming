@@ -7,7 +7,14 @@ import { numberWithDecimals } from 'utils';
 
 import { MainButton } from 'components/basicComponents';
 
-export const RewardAsset = ({ earned, onHarvest, percent, rewardToken }) => {
+export const RewardAsset = ({ earned, onHarvest, percent, rewardToken, periodFinish }) => {
+    const harvest = () => {
+        var currentDate = new Date();
+        if (new Date(currentDate) > new Date(periodFinish)) 
+            onHarvest();
+        else
+            alert('You can only harvest after the Pool is finished');
+    }
     return (
         <Card>
             <div>
@@ -31,7 +38,7 @@ export const RewardAsset = ({ earned, onHarvest, percent, rewardToken }) => {
                     <div>
                         <MainButton style={{ margin: '15px 0px', width: '100%' }}
                             disabled={earned <= 0}
-                            onClick={onHarvest}>
+                            onClick={harvest}>
                             Harvest
                         </MainButton>
                     </div>

@@ -82,7 +82,7 @@ function* harvest() {
         const account = state.accountReducer.account;
         const poolContract = state.poolReducer.contract;
         if (!account || !poolContract) return;
-        yield web3client.poolHarvest(poolContract, account.address);
+        yield web3client.poolHarvest(poolContract, account);
         yield put(poolGetEarned());
     } catch (err) {
 
@@ -111,7 +111,7 @@ function* getEarned() {
         const poolContract = state.poolReducer.contract;
         if (!account || !poolContract) return;
 
-        const earned = yield web3client.poolGetEarned(poolContract, account.address);
+        const earned = yield web3client.poolGetEarned(poolContract, account);
         yield put(poolGetEarnedSuccess(earned));
     } catch (err) {
 

@@ -13,6 +13,7 @@ import {
     poolSetStakeTokenInfo,
     poolSetStakeTokenContract,
     poolGetStakeTokenBalance,
+    poolGetPeriodFinish,
     poolSetContract,
     poolStake,
     poolWithdraw,
@@ -64,12 +65,16 @@ class Farm extends Component {
         const tokenContract = web3client.getContract(Config.tokens[poolData.stakingToken].abi, Config.tokens[poolData.stakingToken].address);
         this.props.setStakeTokenContract(tokenContract);
 
+
+        this.props.getPeriodFinish();
+
     }
     componentDidUpdate(prevProps) {
         if (this.props.account !== prevProps.account ||
             this.props.match.params.pid !== prevProps.match.params.pid) {
             this.props.loadAllowance();
             this.props.loadStaked();
+            this.props.loadEarned();
             this.props.getStakeTokenBalance();
         }
     }
@@ -80,7 +85,7 @@ class Farm extends Component {
     }
 
     render() {
-        const { account } = this.props;
+        const { account ,periodFinish} = this.props;
         const { poolData } = this.state;
         if (!poolData) return <div />;
 
@@ -94,6 +99,7 @@ class Farm extends Component {
                         <RewardAsset
                             rewardToken={rewardTokenInfo}
                             earned={this.props.earned}
+                            periodFinish={periodFinish}
                             percent={1}
                             onHarvest={() => this.props.harvest()}
                         />
@@ -128,6 +134,7 @@ const mapStateToProps = state => ({
     staked: state.poolReducer.staked,
     allowance: state.poolReducer.allowance,
     earned: state.poolReducer.earned,
+    periodFinish: state.poolReducer.periodFinish,
     stakeTokenBalance: state.poolReducer.stakeTokenBalance,
     deadline: state.poolReducer.deadline,
     stakeTokenInfo: state.poolReducer.stakeTokenInfo,
@@ -141,8 +148,8 @@ const mapDispatchToProps = dispatch => ({
     setPoolContract: (payload) => dispatch(poolSetContract(payload)),
     setStakeTokenInfo: (payload) => dispatch(poolSetStakeTokenInfo(payload)),
     setStakeTokenContract: (payload) => dispatch(poolSetStakeTokenContract(payload)),
-
     getStakeTokenBalance: () => dispatch(poolGetStakeTokenBalance()),
+    getPeriodFinish: () => dispatch(poolGetPeriodFinish()),
 
     stake: (payload) => dispatch(poolStake(payload)),
     unstake: (payload) => dispatch(poolWithdraw(payload)),
