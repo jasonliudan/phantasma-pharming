@@ -1,4 +1,4 @@
-import { put, takeLatest, call, select } from 'redux-saga/effects';
+import { put, takeLatest, select } from 'redux-saga/effects';
 import * as constants from 'constants.js';
 
 import web3client from 'api/web3client';
@@ -22,7 +22,7 @@ function* loadAllowance() {
         const poolInfo = state.poolReducer.poolInfo;
         if (!account || !stakeTokenContract || !poolInfo) return;
 
-        const allowance = yield web3client.allowance(stakeTokenContract, account.address, poolInfo.address);
+        const allowance = yield web3client.allowance(stakeTokenContract, account, poolInfo.address);
         yield put(poolApproveTokenSuccess(allowance));
     } catch (err) {
         yield put(poolApproveTokenSuccess(0));

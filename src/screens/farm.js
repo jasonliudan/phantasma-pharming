@@ -11,6 +11,7 @@ import StakeAsset from 'components/stakingAsset';
 import {
     poolSetPoolInfo,
     poolSetStakeTokenInfo,
+    poolSetStakeTokenContract,
     poolStake,
     poolWithdraw,
     poolApproveToken,
@@ -18,6 +19,7 @@ import {
     poolExit,
     poolGetStaked,
     poolGetEarned,
+    poolLoadAllowance
 } from 'actions/poolActions';
 import { setAccount } from 'actions/accountActions';
 import web3client from 'api/web3client';
@@ -34,6 +36,10 @@ class Farm extends Component {
     }
 
     async componentDidMount() {
+
+
+
+        //Main Data
         const { pid } = this.props.match.params;
         const poolData = Config.pools.find(pool => pool.poolId === pid);
         this.setState({ poolData: poolData });
@@ -48,7 +54,17 @@ class Farm extends Component {
         });
 
 
+        //
+        this.props.setStakeTokenInfo(Config.tokens[poolData.stakingToken]);
+        const tokenContract = web3client.getContract(Config.tokens[poolData.stakingToken].abi, Config.tokens[poolData.stakingToken].address);
+        this.props.setStakeTokneContract(tokenContract);
 
+
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.account !== prevProps.account) {
+            this.props.loadAllowance();
+        }
     }
 
     async connectMetamask() {
@@ -116,9 +132,11 @@ const mapDispatchToProps = dispatch => ({
 
     setPoolInfo: (payload) => dispatch(poolSetPoolInfo(payload)),
     setStakeTokenInfo: (payload) => dispatch(poolSetStakeTokenInfo(payload)),
+    setStakeTokneContract: (payload) => dispatch(poolSetStakeTokenContract(payload)),
 
     stake: (payload) => dispatch(poolStake(payload)),
     unstake: (payload) => dispatch(poolWithdraw(payload)),
+    loadAllowance: () => dispatch(poolLoadAllowance()),
     approve: () => dispatch(poolApproveToken()),
     harvest: () => dispatch(poolHarvest()),
     exit: () => dispatch(poolExit()),

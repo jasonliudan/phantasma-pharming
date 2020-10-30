@@ -24,7 +24,7 @@ export default function setBrowserInfo(state = initialState, action) {
         case constants.POOL_SET_STAKE_TOKEN_INFO:
             return {
                 ...state,
-                stakeTokenContract: action.payload
+                stakeTokenInfo: action.payload
             }
         case constants.POOL_SET_REWARD_TOKEN_INFO:
             return {

@@ -8,7 +8,8 @@ const getPrice = async (id) => {
         url: `${API_URL}/simple/price?ids=${id}&vs_currencies=USD`,
         method: 'GET',
     });
-    return response.data[id].usd;
+    const priceid = response.data[id];
+    return priceid !== undefined ? priceid.usd : 0;
 }
 
 export default {

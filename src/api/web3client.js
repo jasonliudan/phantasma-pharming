@@ -1,28 +1,29 @@
 import Web3 from 'web3';
+import Config from 'lib/config';
 
 let web3 = window.web3;
+let ethereum = window.ethereum;
 if (typeof web3 !== 'undefined') {
     web3 = new Web3(Web3.givenProvider);
 } else {
-    web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/0e40641961194ee2b9b45de0673f95fa'));
+    web3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
 }
 
 
 async function getAccount() {
-    //await loadWeb3();
+    await ethereum.enable();
     const accounts = await web3.eth.getAccounts();
     return accounts[0];
 }
 async function approve(contract, address, from) {
     const max = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-    await contract.methods.approve(address, max, from).send({ from })
+    await contract.methods.approve(address, max).send({ from })
         .on('error', function (error, receipt) {
             console.log(error, receipt);
         });
 }
 
 async function allowance(contract, owner, spender) {
-    console.log(contract, owner, spender)
     const result = await contract.methods.allowance(owner, spender).call();
     return result;
 }

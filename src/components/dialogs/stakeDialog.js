@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
 import { numberWithDecimals } from 'utils';
 import Config from 'lib/config';
