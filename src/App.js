@@ -15,7 +15,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router history={history}>
+        <Router history={history} basename={'/pharming'}>
           <GlobalStyle />
           <div className="bgimg">
             <Header />
