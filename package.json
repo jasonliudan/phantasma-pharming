@@ -13,6 +13,7 @@
     "ethereumjs-testrpc": "^6.0.3",
     "moment": "^2.29.1",
     "react": "^17.0.1",
+    "react-circular-progressbar": "^2.0.3",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",

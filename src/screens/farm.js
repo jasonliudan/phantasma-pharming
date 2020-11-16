@@ -26,6 +26,7 @@ import {
 } from 'actions/poolActions';
 import { setAccount } from 'actions/accountActions';
 import web3client from 'api/web3client';
+import coingeckoClient from 'api/coingecko';
 import { getDateLeft } from 'utils';
 
 class Farm extends Component {
@@ -34,16 +35,16 @@ class Farm extends Component {
         super(props);
         this.state = {
             poolData: null,
-            timeLeft: 0
+            timeLeft: 0,
+            apy: 0
         };
     }
 
     async componentDidMount() {
 
-
-
         //Main Data
-        const { pid } = this.props.match.params;
+        const pid = 'farm-soul';
+//        const pid = 'xeenus-weenus';
         const poolData = Config.pools.find(pool => pool.poolId === pid);
         this.setState({ poolData: poolData });
 
@@ -65,9 +66,16 @@ class Farm extends Component {
         const tokenContract = web3client.getContract(Config.tokens[poolData.stakingToken].abi, Config.tokens[poolData.stakingToken].address);
         this.props.setStakeTokenContract(tokenContract);
 
-
         this.props.getPeriodFinish();
 
+        //Calculate APY
+        const rewardTokenPrice = await coingeckoClient.getPrice(Config.tokens[poolData.rewardToken].tokenId);
+        const stakingTokenPrice = await coingeckoClient.getPrice(Config.tokens[poolData.stakingToken].tokenId);
+
+        const rewardRate = await web3client.poolGetRewardRate(poolContract);
+
+        const apy = rewardRate * rewardTokenPrice / Math.pow(10, 18) / stakingTokenPrice * 86400 * 365 * 100;
+        this.setState({ apy: apy});
     }
     componentDidUpdate(prevProps) {
         if (this.props.account !== prevProps.account ||
@@ -86,7 +94,7 @@ class Farm extends Component {
 
     render() {
         const { account ,periodFinish} = this.props;
-        const { poolData } = this.state;
+        const { poolData, apy } = this.state;
         if (!poolData) return <div />;
 
         const rewardTokenInfo = Config.tokens[poolData.rewardToken];
@@ -96,26 +104,31 @@ class Farm extends Component {
             <div>
                 {account !== null ? <div>
                     <InfoCardWrapper>
-                        <RewardAsset
-                            rewardToken={rewardTokenInfo}
-                            earned={this.props.earned}
-                            periodFinish={periodFinish}
-                            percent={1}
-                            onHarvest={() => this.props.harvest()}
-                        />
-                        <StakeAsset
-                            stakeTokenInfo={stakeTokenInfo}
-                            rewardTokenInfo={rewardTokenInfo}
-                            allowed={this.props.allowance > 0}
-                            started={this.state.timeLeft > 0}
-                            staked={this.props.staked}
-                            totalStaked={this.props.totalStaked}
-                            balance={this.props.stakeTokenBalance}
-                            rewardBalance={this.props.poolInfo.balance}
-                            onApprove={() => this.props.approve()}
-                            onStake={(amount) => this.props.stake(amount)}
-                            onUnstakeAll={() => this.props.unstake(this.props.staked)}
-                        />
+                        <div className='cardWrapper'>
+                            <StakeAsset
+                                stakeTokenInfo={stakeTokenInfo}
+                                rewardTokenInfo={rewardTokenInfo}
+                                allowed={this.props.allowance > 0}
+                                started={this.state.timeLeft > 0}
+                                staked={this.props.staked}
+                                totalStaked={this.props.totalStaked}
+                                balance={this.props.stakeTokenBalance}
+                                rewardBalance={this.props.poolInfo.balance}
+                                onApprove={() => this.props.approve()}
+                                onStake={(amount) => this.props.stake(amount)}
+                                onUnstakeAll={() => this.props.unstake(this.props.staked)}
+                            />
+                        </div>
+                        <div className='cardWrapper'>
+                            <RewardAsset
+                                rewardToken={rewardTokenInfo}
+                                earned={this.props.earned}
+                                periodFinish={periodFinish}
+                                percent={1}
+                                apy={apy}
+                                onHarvest={() => this.props.harvest()}
+                            />
+                        </div>
                     </InfoCardWrapper>
                 </div> : <WalletConnectButton
                     onClick={() => this.connectMetamask()}>CONNECT WALLET</WalletConnectButton>}
@@ -126,6 +139,9 @@ class Farm extends Component {
 
 const InfoCardWrapper = styled.div`
     display: flex;
+    height: 100vh;
+    padding-top: 90px;
+    box-sizing: border-box;
 `
 
 const mapStateToProps = state => ({
