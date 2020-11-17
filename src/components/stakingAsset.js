@@ -10,11 +10,10 @@ import UnstakeAllDialog from 'components/dialogs/unstakeAllDialog';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, onUnstakeAll, balance, rewardBalance, stakeTokenInfo, rewardTokenInfo }) => {
+export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, onUnstakeAll, balance, rewardBalance, stakeTokenInfo, rewardRate, rewardTokenInfo, maximumStakingAmount }) => {
     const [stakeDialogOpen, setStakeDialogOpen] = React.useState(false);
     const [unstakeDialogOpen, setUnstakeDialogOpen] = React.useState(false);
-
-    const stakedAmount= numberWithDecimals(staked, stakeTokenInfo.decimals, Config.Utils.decimals);
+console.log( rewardRate * (staked / totalStaked) / Math.pow(10, 18) * 3600  * 24 * 30)
     return (
         <Card>
             <div>
@@ -22,18 +21,30 @@ export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, o
                     <div>
                         <h2 style={{marginBottom: '20px'}}>{stakeTokenInfo.symbol}</h2>
                     </div>
-                    <div style={{ position: 'relative', margin: '25px'}}>
-                        <CircularProgressbar value={55} maxValue={100} text={`100%`} 
-                        strokeWidth={3} />
+                    <div style={{ position: 'relative', margin: 'auto', width: '250px'}}>
+                        <CircularProgressbar value={numberWithDecimals(staked, stakeTokenInfo.decimals, Config.Utils.decimals)} 
+                        maxValue={numberWithDecimals(totalStaked, stakeTokenInfo.decimals, Config.Utils.decimals)} strokeWidth={3} />
                         <TextInsideProgress>
                             <img src={require('assets/icons/phantasma-small.svg')} alt={stakeTokenInfo.name} />
+                            <p style={{fontSize: '50px', lineHeight: '30px'}}>
+                                {numberWithDecimals(staked, stakeTokenInfo.decimals, Config.Utils.decimals)}
+                            </p>
+                            <p style={{fontSize: '18px', fontWeight: '900', color: '#4a9eff', marginTop: '30px'}}>Out of {numberWithDecimals(totalStaked, stakeTokenInfo.decimals, Config.Utils.decimals)}</p>
                         </TextInsideProgress>
                     </div>
-                    <div>
+                    <div style={{marginTop: '20px'}}>
                         <img src={require('assets/staking.svg')} alt={stakeTokenInfo.name} />
+                        
                     </div>
                     <RewardInfo>
                        <img src={require('assets/icons/phantasma-energy-small.svg')} alt={stakeTokenInfo.name} />
+                       <div>
+                          {totalStaked !== 0 && (rewardRate * (staked / totalStaked) / Math.pow(10, 18) * 3600  * 24 * 30).toFixed(0)}
+                       </div>
+                        <div style={{fontSize: '15px', marginTop: '5px'}}>
+                            <div style={{borderBottom: '1px solid black'}}>{rewardTokenInfo.symbol}</div>
+                            <div>MONTH</div>
+                        </div>
                     </RewardInfo>
                 </div>
                 <div>
@@ -110,19 +121,19 @@ const RewardInfo = styled.div`
     width: 250px;
     border-radius: 10px;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 5px;
     display: flex;
-    justify-content: center;
-    padding-left: 20px;
+    justify-content: space-between;
+    padding: 0px 10px;
     font-weight: 600;
     font-size: 40px;
 `
 
 const TextInsideProgress = styled.div`
     position: absolute;
-    top: 40px;
+    top: 30px;
     width: 100%;
 `
 
 export default StakeAsset;
-
+   

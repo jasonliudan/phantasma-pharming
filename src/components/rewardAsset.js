@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Config from 'lib/config';
@@ -8,6 +8,19 @@ import { numberWithDecimals } from 'utils';
 import { MainButton } from 'components/basicComponents';
 
 export const RewardAsset = ({ earned, onHarvest, apy, rewardToken, periodFinish }) => {
+    const [ remainingTime, setRemainingTime] = useState(0);
+    useEffect(() => {
+        if(remainingTime === 0){
+            var currentDate = new Date();
+            if (new Date(currentDate) < new Date(periodFinish))
+            {
+                var diff = Math.abs(periodFinish - currentDate) / 1000;
+                setRemainingTime(diff);
+            }
+        }
+    });
+
+      
     const harvest = () => {
         var currentDate = new Date();
         if (new Date(currentDate) > new Date(periodFinish)) 
@@ -20,7 +33,7 @@ export const RewardAsset = ({ earned, onHarvest, apy, rewardToken, periodFinish 
             <div>
                 <div>
                     <div>
-                        <h2 style={{marginBottom: '50px'}}>EARNED</h2>
+                        <h2 style={{marginBottom: '30px'}}>EARNED</h2>
                     </div>
                 
                     <RewardAmount>
@@ -31,11 +44,11 @@ export const RewardAsset = ({ earned, onHarvest, apy, rewardToken, periodFinish 
                             {rewardToken.symbol}
                         </span>
                     </RewardAmount>
-                    <h2 style={{marginTop: '50px'}}>TIME LEFT</h2>
+                    <h2 style={{marginTop: '30px'}}>TIME LEFT</h2>
                     <TimeLeft>
-                        <span style={{fontWeight:'900'}}>7</span>d:
-                        <span style={{fontWeight:'900'}}>4</span>h:
-                        <span style={{fontWeight:'900'}}>31</span>m
+                        <span style={{fontWeight:'900'}}>{Math.floor(remainingTime / 86400)}</span>d:
+                        <span style={{fontWeight:'900'}}>{Math.floor(remainingTime / 3600) % 24}</span>h:
+                        <span style={{fontWeight:'900'}}>{Math.floor(remainingTime / 60) % 60}</span>m
                     </TimeLeft>
                     <div style={{marginTop: '42px'}}>
                         <img src={rewardToken.image} alt={rewardToken.name} />
@@ -45,7 +58,7 @@ export const RewardAsset = ({ earned, onHarvest, apy, rewardToken, periodFinish 
                     </APY>
                 </div>
                 <div>
-                    <MainButton style={{ margin: '15px 0px', width: '100%' }}
+                    <MainButton style={{ marginTop: '15px', width: '100%' }}
                         disabled={earned <= 0}
                         onClick={harvest}>
                         Harvest
@@ -71,7 +84,7 @@ const RewardAmount = styled.div`
     background-color: #4a9eff;
     color: #130035;
     height: 60px;
-    width: 250px;
+    max-width: 250px;
     border-radius: 10px;
     margin: auto;
     display: flex;
@@ -84,7 +97,7 @@ const TimeLeft = styled.div`
     background-color: transparent;
     color: white;
     height: 60px;
-    width: 250px;
+    max-width: 250px;
     border-radius: 10px;
     margin: auto;
     display: flex;
@@ -98,7 +111,7 @@ const APY = styled.div`
     background-color: #4a9eff;
     color: #130035;
     height: 48px;
-    width: 250px;
+    max-width: 250px;
     border-radius: 10px;
     margin: auto;
     margin-top: 20px;

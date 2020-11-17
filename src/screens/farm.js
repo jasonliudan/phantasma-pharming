@@ -14,6 +14,7 @@ import {
     poolSetStakeTokenContract,
     poolGetStakeTokenBalance,
     poolGetPeriodFinish,
+    poolGetMaximumStakingAmount,
     poolSetContract,
     poolStake,
     poolWithdraw,
@@ -36,15 +37,16 @@ class Farm extends Component {
         this.state = {
             poolData: null,
             timeLeft: 0,
-            apy: 0
+            apy: 0,
+            rewardRate: 0
         };
     }
 
     async componentDidMount() {
 
         //Main Data
-        const pid = 'farm-soul';
-//        const pid = 'xeenus-weenus';
+    //    const pid = 'farm-soul';
+      const pid = 'xeenus-weenus';
         const poolData = Config.pools.find(pool => pool.poolId === pid);
         this.setState({ poolData: poolData });
 
@@ -67,6 +69,7 @@ class Farm extends Component {
         this.props.setStakeTokenContract(tokenContract);
 
         this.props.getPeriodFinish();
+        this.props.getMaximumStakingAmount();
 
         //Calculate APY
         const rewardTokenPrice = await coingeckoClient.getPrice(Config.tokens[poolData.rewardToken].tokenId);
@@ -74,8 +77,8 @@ class Farm extends Component {
 
         const rewardRate = await web3client.poolGetRewardRate(poolContract);
 
-        const apy = rewardRate * rewardTokenPrice / Math.pow(10, 18) / stakingTokenPrice * 86400 * 365 * 100;
-        this.setState({ apy: apy});
+        const apy = stakingTokenPrice !== 0 ? rewardRate * rewardTokenPrice / Math.pow(10, 18) / stakingTokenPrice * 86400 * 365 * 100 : 0;
+        this.setState({ apy: apy, rewardRate: rewardRate});
     }
     componentDidUpdate(prevProps) {
         if (this.props.account !== prevProps.account ||
@@ -94,7 +97,7 @@ class Farm extends Component {
 
     render() {
         const { account ,periodFinish} = this.props;
-        const { poolData, apy } = this.state;
+        const { poolData, apy, rewardRate } = this.state;
         if (!poolData) return <div />;
 
         const rewardTokenInfo = Config.tokens[poolData.rewardToken];
@@ -108,12 +111,15 @@ class Farm extends Component {
                             <StakeAsset
                                 stakeTokenInfo={stakeTokenInfo}
                                 rewardTokenInfo={rewardTokenInfo}
+                                rewardRate={rewardRate}
                                 allowed={this.props.allowance > 0}
                                 started={this.state.timeLeft > 0}
                                 staked={this.props.staked}
                                 totalStaked={this.props.totalStaked}
                                 balance={this.props.stakeTokenBalance}
                                 rewardBalance={this.props.poolInfo.balance}
+                                maximumStakingAmount={this.props.maximumStakingAmount}
+                                periodFinish={periodFinish}
                                 onApprove={() => this.props.approve()}
                                 onStake={(amount) => this.props.stake(amount)}
                                 onUnstakeAll={() => this.props.unstake(this.props.staked)}
@@ -155,7 +161,8 @@ const mapStateToProps = state => ({
     deadline: state.poolReducer.deadline,
     stakeTokenInfo: state.poolReducer.stakeTokenInfo,
     rewardTokenInfo: state.poolReducer.rewardTokenInfo,
-    poolInfo: state.poolReducer.poolInfo
+    poolInfo: state.poolReducer.poolInfo,
+    maximumStakingAmount: state.poolReducer.maximumStakingAmount
 });
 const mapDispatchToProps = dispatch => ({
     setAccount: (account) => dispatch(setAccount(account)),
@@ -166,7 +173,7 @@ const mapDispatchToProps = dispatch => ({
     setStakeTokenContract: (payload) => dispatch(poolSetStakeTokenContract(payload)),
     getStakeTokenBalance: () => dispatch(poolGetStakeTokenBalance()),
     getPeriodFinish: () => dispatch(poolGetPeriodFinish()),
-
+    getMaximumStakingAmount: () => dispatch(poolGetMaximumStakingAmount()),
     stake: (payload) => dispatch(poolStake(payload)),
     unstake: (payload) => dispatch(poolWithdraw(payload)),
     loadAllowance: () => dispatch(poolLoadAllowance()),
