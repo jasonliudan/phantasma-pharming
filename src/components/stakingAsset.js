@@ -13,7 +13,7 @@ import 'react-circular-progressbar/dist/styles.css';
 export const StakeAsset = ({ totalStaked, staked, allowed, onApprove, onStake, onUnstakeAll, balance, rewardBalance, stakeTokenInfo, rewardRate, rewardTokenInfo, maximumStakingAmount }) => {
     const [stakeDialogOpen, setStakeDialogOpen] = React.useState(false);
     const [unstakeDialogOpen, setUnstakeDialogOpen] = React.useState(false);
-console.log( rewardRate * (staked / totalStaked) / Math.pow(10, 18) * 3600  * 24 * 30)
+console.log( rewardRate)
     return (
         <Card>
             <div>

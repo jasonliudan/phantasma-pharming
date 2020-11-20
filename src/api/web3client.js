@@ -114,7 +114,7 @@ async function poolGetPeriodFinish(contract) {
 }
 
 async function poolGetRewardRate(contract) {
-    const result = await contract.methods.rewardPerToken().call();
+    const result = await contract.methods.rewardRate().call();
     return result;
 }
 
