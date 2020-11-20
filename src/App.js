@@ -21,7 +21,7 @@ class App extends Component {
 
             <div className="mainArea">
               <Switch>
-                <Route exact path="/" component={Farm} />
+                <Route exact path="/pharming" component={Farm} />
               </Switch>
             </div>
 

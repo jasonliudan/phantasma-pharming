@@ -6,7 +6,7 @@ class Header extends Component {
     render() {
         return (
             <div className='header'>
-                <Link to={{ pathname: '/' }} style={{ textDecoration: 'none', color: 'white' }}>
+                <Link to={{ pathname: '/pharming' }} style={{ textDecoration: 'none', color: 'white' }}>
                     <div style={{display: 'flex', width: 'fit-content', margin: 'auto', marginTop: '30px', marginBottom: '30px'}}>
                         <img src={require('assets/logo.png')} alt='logo' width={96} height={96}/>
                         <div style={{ marginLeft: '18px'}}>
